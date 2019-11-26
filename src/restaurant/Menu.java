@@ -1,5 +1,6 @@
 package restaurant;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,28 +9,44 @@ public class Menu {
     private Date lastUpdated;
 
     public ArrayList<MenuItem> getMenuItems() {
-        return menuItems;
+        return this.menuItems;
     }
 
-    public Menu setMenuItems(MenuItem aMenuItem) {
+    public void setMenuItems(MenuItem aMenuItem) {
         this.menuItems.add(aMenuItem);
-        return this;
     }
 
     public Date getLastUpdated() {
         return lastUpdated;
     }
 
-    public Menu setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
-        return this;
+    }
+
+    public void addMenuItem(MenuItem menuItem){
+        this.menuItems.add(menuItem);
+    }
+
+    public void removeMenuItem(MenuItem menuItem){
+        this.menuItems.remove(menuItem);
+    }
+
+    public void printMenu(){
+        System.out.println(this.toString());
     }
 
     @Override
     public String toString() {
-        return "Menu{" +
-                "menuItems=" + menuItems +
-                ", lastUpdated=" + lastUpdated +
-                '}';
+        String menuItemString = "Menu" + "\n" +
+                "**********\n" +
+                "**********\n";
+        for (MenuItem item : this.menuItems){
+            menuItemString += item.toString() + "\n" + "\n";
+//            menuItemStrings.add(item.toString());
+        }
+        return menuItemString;
     }
+
+
 }

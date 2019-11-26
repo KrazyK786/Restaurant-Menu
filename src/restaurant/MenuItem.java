@@ -1,5 +1,6 @@
 package restaurant;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,10 +10,14 @@ public class MenuItem {
     private String description = "";
     private String[] categoryOptions = new String[]{"appetizer","main course", "dessert"};
     private String currentCategory;
-    private boolean isNew = false;
+    private boolean isNew;
 
     private boolean isValidPrice(double givenPrice){
         return givenPrice > -1;
+    }
+
+    public void printMenuItem(){
+        System.out.println(this.toString());
     }
 
     public MenuItem(double aPrice, String aDescription,String aCurrentCategory,boolean aIsNew){
@@ -29,7 +34,7 @@ public class MenuItem {
     }
 
     public double getPrice() {
-        return price;
+        return this.price;
     }
 
     public void setPrice(double price) {
@@ -38,22 +43,57 @@ public class MenuItem {
     }
 
     public boolean isNew() {
-        return isNew;
+        return this.isNew;
     }
 
     public void setNew(boolean aNew) {
-        isNew = aNew;
+        this.isNew = aNew;
     }
 
 
     @Override
     public String toString() {
-        return "MenuItem{" +
-                "price=" + price +
-                ", description='" + description + '\'' +
-                ", categoryOptions=" + Arrays.toString(categoryOptions) +
-                ", currentCategory='" + currentCategory + '\'' +
-                ", isNew=" + isNew +
-                '}';
+        String newMessage = "";
+        if (isNew){
+            newMessage = "**New Item**";
+        }
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedPrice = df.format(price);
+
+        return this.description + "\n" +
+                "*****" + "\n" +
+                "price = $" + df.format(price) + "\n" +
+    //                ", description='" + description + '\'' +
+                currentCategory + "\n" +
+                newMessage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MenuItem menuItem = (MenuItem) o;
+
+        if (Double.compare(menuItem.price, price) != 0) return false;
+        if (isNew != menuItem.isNew) return false;
+        if (description != null ? !description.equals(menuItem.description) : menuItem.description != null)
+            return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(categoryOptions, menuItem.categoryOptions)) return false;
+        return currentCategory != null ? currentCategory.equals(menuItem.currentCategory) : menuItem.currentCategory == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(price);
+        result = (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(categoryOptions);
+        result = 31 * result + (currentCategory != null ? currentCategory.hashCode() : 0);
+        result = 31 * result + (isNew ? 1 : 0);
+        return result;
     }
 }
